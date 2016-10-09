@@ -1,41 +1,17 @@
-setwd("~/Desktop/OneDrive/MA 386")
-require(openxlsx)
-df <- read.xlsx("DATA_STACKED.XLSX",sheet = 1)
-
-# df <- head(df,200)
-
-
 library(ggplot2)
-
 library(plyr)
 library(dplyr)
 library(ggbiplot)
-df = df[complete.cases(df),]
-df = df[,sapply(df, function(v) var(v, na.rm=TRUE)!=0)]   # remove constant column
-df_pca <- prcomp(df,center = TRUE,scale. = TRUE)
-
-
-
-
-
-select_features=c("Q15_26","Q15_28")
-sample_ratio = 0.1
-
-myggbiplot(df_pca)
-
-myggbiplot(df_pca,select_features = NULL,sample_ratio = 0.05)
-
-
 
 myggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE, 
-                     obs.scale = 1 - scale, var.scale = scale, 
-                     groups = NULL, ellipse = FALSE, ellipse.prob = 0.68, 
-                     labels = NULL, labels.size = 3, alpha = 1, 
-                     var.axes = TRUE, 
-                     circle = FALSE, circle.prob = 0.69, 
-                     varname.size = 3, varname.adjust = 1.5, 
-                     varname.abbrev = FALSE, select_features=NULL,
-                     sample_ratio = 0.1,...)
+                       obs.scale = 1 - scale, var.scale = scale, 
+                       groups = NULL, ellipse = FALSE, ellipse.prob = 0.68, 
+                       labels = NULL, labels.size = 3, alpha = 1, 
+                       var.axes = TRUE, 
+                       circle = FALSE, circle.prob = 0.69, 
+                       varname.size = 3, varname.adjust = 1.5, 
+                       varname.abbrev = FALSE, select_features=NULL,
+                       sample_ratio = 0.1,...)
 {
   library(ggplot2)
   library(plyr)
@@ -171,7 +147,7 @@ myggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE,
   
   # Draw either labels or points
   if(!is.null(df.u$labels)) {
-    print("get run in if")
+    
     if(!is.null(df.u$groups)) {
       g <- g + geom_text(aes(label = labels, color = groups), 
                          size = labels.size)
@@ -180,10 +156,10 @@ myggbiplot <- function(pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE,
     }
   } else {
     if(!is.null(df.u$groups)) {
-      print("get run")
+      
       g <- g + geom_point(aes(color = groups), alpha = alpha)
     } else {
-      print("get run here")
+     
       g <- g + geom_point(alpha = alpha)      
     }
   }
