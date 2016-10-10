@@ -12,7 +12,7 @@ shinyServer(function(input,output){
   
   output$myggbiplot <- reactivePlot(function(){
     if(!is.null(input$file)){
-            
+            df <- read.xlsx(input$file$datapath,sheet = 1)
             df = df[complete.cases(df),]
             df = df[,sapply(df, function(v) var(v, na.rm=TRUE)!=0)]   # remove constant column
             df_pca <- prcomp(df,center = TRUE,scale. = TRUE)
@@ -23,6 +23,7 @@ shinyServer(function(input,output){
               selected = input$vecs
             }
             inputAlpha = as.numeric(input$alpha)
+         
             inputPercentage = as.numeric(input$percentage)
             g <- myggbiplot(df_pca,sample_ratio=inputPercentage,select_features=selected,alpha = input$alpha)
             print(g)

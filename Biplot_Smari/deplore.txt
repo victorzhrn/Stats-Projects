@@ -1,0 +1,1 @@
+rsconnect::deployApp('~/Desktop/OneDrive/myGit/Statistics-Related/Biplot_Smari/shinny_myggbiplot')
