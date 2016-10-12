@@ -12,33 +12,13 @@ income_df$Geography=gsub("ZCTA5 ","" ,income_df$Geography)
 income_df$Geography = as.factor(income_df$Geography)
 income_df$estimate_median = as.numeric(income_df$estimate_median)
 
+df_income <- income_df[c("Geography","estimate_median")]
+
+load("target_info.Rda")
 
 
-base_url1<-"http://gam.target.com/store-locator/state-result?lnk=statelisting_stateresult&stateCode="
-base_url2<-"&stateName="
 
 
-df_store_info= data.frame()
-for(state_abbrev in state.abb){
-  
-  state<-state.name[grep(state_abbrev,state.abb)]
-  url<-paste(base_url1,state_abbrev,base_url2,state,sep= "")
-  print(url)
-  location_html <- read_html(url)
-  json <- html_nodes(location_html,"#primaryJsonResponse") %>% html_text() 
-  jlist <-fromJSON(json)
-  df <- jlist[2]
-  df <- as.data.frame(df)
-  df$storeList.zipCode <- gsub("-.*","",df$storeList.zipCode)
-  df_summary <- as.data.frame(table(df$storeList.zipCode))
-  df_store_info <- rbind(df_store_info,df_summary)
-}
-names(df_store_info) <- c("ZipCode","#stores")
-df_store_info <-as.data.frame(table(df_store_info$ZipCode))
-names(df_store_info) <- c("ZipCode","#stores")
-df_store_info$ZipCode <- as.factor(df_store_info$ZipCode)
-
-merge(df_store_info,income_df,by=c(ZipCode,Geography))
 
 
 
