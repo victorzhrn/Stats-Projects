@@ -13,12 +13,19 @@ income_df$Geography = as.factor(income_df$Geography)
 income_df$estimate_median = as.numeric(income_df$estimate_median)
 
 df_income <- income_df[c("Geography","estimate_median")]
+names(df_income) <- c("ZipCode","est_income_median")
 
 load("target_info.Rda")
 
 
+df_gen <- merge(df_income,df_stores,by="ZipCode",all = TRUE)
+
+TH_median <- df_gen$est_income_median[df_gen$ZipCode==47803]
+
+store_higher_median <- sum(df_gen$est_income_median>TH_median & df_gen$`#stores`>0,na.rm=TRUE)
+store_lower_median <- sum(df_gen$est_income_median<TH_median & df_gen$`#stores`>0,na.rm=TRUE)
 
 
-
-
+no_store_higher_median <- sum(df_gen$est_income_median>TH_median & is.na(df_gen$`#stores`))
+no_store_lower_median <- sum(df_gen$est_income_median<TH_median & is.na(df_gen$`#stores`))
 
