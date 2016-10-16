@@ -1,6 +1,9 @@
-setwd("~/Desktop/OneDrive/MA 386")
-require(openxlsx)
-df <- read.xlsx("DATA_STACKED.XLSX",sheet = 1)
+# setwd("~/Desktop/OneDrive/MA 386")
+# require(openxlsx)
+# df <- read.xlsx("DATA_STACKED.XLSX",sheet = 1)
+
+data(wine)
+df = wine
 
 df = df[complete.cases(df),]
 df = df[,sapply(df, function(v) var(v, na.rm=TRUE)!=0)]   # remove constant column
@@ -14,7 +17,7 @@ library(grid)
 
 # function parameters
 pcobj = df_pca
-choices = 1:2
+choices = 1:3
 scale = 1
 pc.biplot = TRUE 
 obs.scale = 1 - scale
@@ -32,10 +35,11 @@ varname.size = 3
 varname.adjust = 1.5 
 varname.abbrev = FALSE
 
-select_features=c("Q15_26","Q15_28","Q15_1","q7_1","q7_2","q7_3")
+#select_features=c("Q15_26","Q15_28","Q15_1","q7_1","q7_2","q7_3")
+select_features=NULL
 
 sample_ratio = 0.5
-alpha = 0.1        # transparency 
+alpha = 1        # transparency 
 
 # stop condition
 stopifnot(length(choices) == 2)
@@ -51,7 +55,9 @@ if(inherits(pcobj, 'prcomp')){
 }
 
 # Scores
+choices <- c(1,3)
 choices <- pmin(choices, ncol(u))
+
 df.u <- as.data.frame(sweep(u[,choices], 2, d[choices]^obs.scale, FUN='*'))
 
 # Directions
@@ -184,8 +190,40 @@ if(!is.null(df.u$labels)) {
   }
 }
 
-# heat map option
-# g <- g+ stat_bin2d(aes(fill = ..count..),bins = 50)
-# 
+
+# Overlay a concentration ellipse if there are groups
+if(!is.null(df.u$groups) && ellipse) {
+  theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
+  circle <- cbind(cos(theta), sin(theta))
+  
+  ell <- ddply(df.u, 'groups', function(x) {
+    if(nrow(x) <= 2) {
+      return(NULL)
+    }
+    sigma <- var(cbind(x$xvar, x$yvar))
+    mu <- c(mean(x$xvar), mean(x$yvar))
+    ed <- sqrt(qchisq(ellipse.prob, df = 2))
+    data.frame(sweep(circle %*% chol(sigma) * ed, 2, mu, FUN = '+'), 
+               groups = x$groups[1])
+  })
+  names(ell)[1:2] <- c('xvar', 'yvar')
+  g <- g + geom_path(data = ell, aes(color = groups, group = groups))
+}
+
+# Label the variable axes
+if(var.axes) {
+  g <- g + 
+    geom_text(data = df.v, 
+              aes(label = varname, x = xvar, y = yvar, 
+                  angle = angle, hjust = hjust), 
+              color = 'darkred', size = varname.size)
+}
+# Change the name of the legend for groups
+# if(!is.null(groups)) {
+#   g <- g + scale_color_brewer(name = deparse(substitute(groups)), 
+#                               palette = 'Dark2')
+# }
+
+g <- g+theme_bw()
 
 g
