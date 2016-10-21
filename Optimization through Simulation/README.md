@@ -6,44 +6,37 @@ output: word_document
 ---
 
 # Background
-The goal of this project is to find the best strategy to diagnose people with fewest tests. The varible need to be optimized is the number of blood works should be grouped to perform the first round test. If such group is tested positive for Zika virus, then each member in that group will be tested individually. 
+The goal of this project is to find the best strategy to diagnose people with Ebola with fewest tests. The varible need to be optimized is the number of blood works should be grouped to perform the first round test (defined as k for the rest of this report). If such group is tested positive for Ebola virus, then each member in that group will be tested individually in the second round. Two different approaches both using simulation are taken to meet the goal of this project. The first one find out optimal k by computing average number of tests needed on randomly simulated populational sample while the second approach compare all possible k on same simulated population sample for numbers of iterations. 
 
 # Approaches
-Two different approaches both using simulation are taken to meet the goal of this project. Based on the given information, the infected population is binomially distributed with the rate of 0.011, and total number of bloodworks is 12,800. Sinces the number of groups has to be an interger, the number of bloodworks in each mixture is calculated as the all possible factors of total number of bloodworks.
+ Based on the given information, the infected population is binomially distributed with the rate of 0.011, and total number of bloodworks is 12,800. Sinces the number of groups has to be an interger, the number of bloodworks in each mixture is calculated as the all possible factors of total number of bloodworks.
 
 ```r
 sample <- rbinom(12800,1,0.11)   # generate random samples 
 ks <- factorize(n)   # generate possible factors of n as possible k
 ```
-The first approach calculates number of tests needed for each possible k for 200 different samples and compare the average number of tests needed across different ks. The second approach calculate number of tests needed on samples with different ks and pick the best k of of each sample. 
+The first approach calculates average number of tests needed for each possible k for 200 different samples and compare the average number of tests needed across different k. The second approach calculate number of tests needed on samples with different ks and pick the best k of of each sample. 
 
 # Result & Analysis
 
 
 ### First Approach
-The for each possible k, 200 different samples are tested on each k and then the average of number of tests are calculated for comparision between ks. To visualize the result, a line plot is constructed as following:
+The for each possible k, 200 different samples are tested on each k and then the average number of tests are calculated for comparision between all possible k. To visualize the result, a line plot is constructed as following:
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 
 
-On the plot, number of tests needed decreases first as k increase and reach to its minimal at k=10, and then rise up again. This result indicates that the optimal k is 10. However, there is a drawback in this method that is number of tests needed for for k is calculated on different groups of samples which potentially can lead to inconsistent or misleading result. Considering the simulation is running on 200 different samples, the variation between groups of samples given to each k can be negligible. 
+On the plot, average number of tests needed decreases first as k increase and reach to its minimal at k=10, and then rise up again. This result indicates that the optimal k is 10. However, there is a drawback in this method that number of tests needed for for k is calculated on different groups of samples can potentially lead to inconsistent or misleading result. Considering the simulation is repeated on 200 different samples, the variation between groups of samples given to each k can be negligible. 
 
 ### Second Approach
-The approach differs the first one, instead of running simulations on different ks with different samples, this approach calculate number of tests needed of different ks of same sample at each iteration. In this case, for two different samples, the best k can be different. After simulate it on 200 different samples, the best k with highest occurence is the optimal global k. Similar to the first approach, a line plot is constructed to compare the average number of simulations versus different values of k. 
+The second approach differs the first one, instead of running simulations on different ks with different samples, this approach calculate average number of tests needed of different ks of same sample at each iteration. In this case, for two different samples, the best k can be different. After simulate it on 200 different samples, the best k with highest occurence is the optimal global k. Similar to the first approach, a line plot is constructed to compare the average number of simulations versus different values of k. 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
-Based on this line plot, it reflects similar informations as it from the first approach. The optimal k with fewest number of tests is 10. A pie plot is also constructed to compare the occurence of different optimal k among total 200 iterations. 
+Based on this line plot, it reflects similar informations as it from the first approach. The optimal k with fewest number of tests is 10. 
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
-
-
-The pie plot indicates for majority of samples, the best k is 10. This approach, compared to the first, does not have the drawback of potential inconsistence of result, since it simulate exactly number of tests with different ks on same sample. This result indicates, it is highly likely, k=10, is the best choice. 
 
 ### Conclusion
 In summary, from the results of both approaches, k = 10 is the optimal solution to this particular problem. Bloodworks should be mixed in a group of 10 on the first round of tests, and then if tested positive, each individual in that need to be tested one by one. 
 
-
-# Reflection
-Even though the two approaches discussed above reflects same result, the potential limitations should be fully discussed. 
 
 # Full Code
 
