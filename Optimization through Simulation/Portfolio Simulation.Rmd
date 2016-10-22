@@ -74,7 +74,7 @@ for(k in ks){
 
 # plot number of trials for different possible value of k
 # notice x-axis as k -(number of people in each group) is factorized to make plot proportional
-g <- ggplot()+geom_line(aes(x=as.factor(output_k),y=output_trial,group=1))
+g <- ggplot()+geom_line(aes(x=as.factor(output_k),y=output_trial,group=1))+theme(axis.text.x = element_text(angle=45))
 g <- g+xlab("number of people in each testing group")+ylab("number of trails needed")+ggtitle("number of tests vs. k")
 g
 ```
@@ -104,7 +104,7 @@ for (i in 1:iterations){
 names(df) <- ks
 
 # line plot of # of tests vs. k
-gg<- ggplot()+geom_line(aes(x=as.factor(ks),y=apply(df,2,mean)),group=1)
+gg<- ggplot()+geom_line(aes(x=as.factor(ks),y=apply(df,2,mean)),group=1)+theme(axis.text.x = element_text(angle=45))
 gg <- gg+xlab("number of people in each testing group")+ylab("number of trails needed")+ggtitle("number of tests vs. k")
 gg
 ```
