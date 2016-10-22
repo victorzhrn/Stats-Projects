@@ -1,6 +1,6 @@
 # My Statistics Portofolio
 ###Description
-This repo contains some of my statistics-related portofolios when I am studying at Rose-Hulman. Most instructions of those portofolios are created by Dr. Eric Reyes. 
+This repo contains some of my statistics-related portofolios when I am studying at Rose-Hulman. Most instructions of those portfolios are created and provided by Dr. Eric Reyes. A detailed report is stored in each project's folder.
 
 ##Projects Summary
 * Logistic Regression
