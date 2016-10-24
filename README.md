@@ -12,3 +12,6 @@ This repo contains some of my statistics-related portofolios when I am studying 
 * Permutation Test
 	* Conduct permutation test to answer the question whether the disqualified votes are done on purpose during a law passing process.
 	* Test if the disqualified votes' distribution differs from qualified votes'.
+* Roc Curve Analysis
+	* Analyze possible fingerprint matching false rate through ROC curve.
+	* Build an online app for illustration and more app details can be hind [here](https://zhangruinan.shinyapps.io/fp_roc/)
