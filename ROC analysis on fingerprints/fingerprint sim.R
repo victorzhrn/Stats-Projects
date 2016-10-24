@@ -13,20 +13,31 @@ center7 <- c(3,2.1)
 df_centers <- as.data.frame(rbind(center1, center2, 
                                   center3,center4,center5,center6,center7))
 
-fingerprint1 <- list(center1, center2, center3)
-
-# parameters
-recog_sd = 0.01
-iterations = 1
-people_sd = 0.2
-number_of_people = 30
-n_tests = 200
-
 # parameters for finger distribution
 # all units are in mm
-fp_shape = 0.193*2
+fp_shape = 0.193
 fp_scale = 0.591
 fp_rate= 1/fp_scale
+
+df_centers <- data.frame()
+generate_minutiae <- function(df_centers){
+  new_distance = rgamma(1,fp_shape,rate=fp_rate)
+  angle = runif(1,0,2*pi)
+  new_x = new_distance*cos(angle)+0.5
+  new_y = new_distance*sin(angle)+0.7
+  return(c(new_x,new_y))
+}
+
+for (i in 1:7){
+  new_minutiae = generate_minutiae()
+  df_centers <- rbind(df_centers,new_minutiae)
+}
+
+# parameters
+recog_sd = 0.001
+iterations = 1
+number_of_people = 1
+n_tests = 200
 
 # functions
 generate_point<- function(p,sd=recog_sd){
@@ -75,7 +86,8 @@ generate_identicals <- function(df_centers){
 ### generate different people's minutea points
 
 generate_center <- function(center,c_id){
-  new_distance = rgamma(1,shape = fp_shape,rate = fp_rate)
+  # new_distance = rgamma(1,shape = fp_shape,rate = fp_rate)
+  new_distance = runif(1,min = 0,0.15)
   angle = runif(1,0,2*pi)
   new_x = center[1] + cos(angle)*new_distance
   new_y = center[2] + sin(angle)*new_distance
@@ -104,9 +116,10 @@ for (i in 1:number_of_people){
   }
 }
 # fac <- as.factor(paste(df_lines$c_id,df_lines$person_id))
+persons <- as.factor(df_lines$person_id)
 fac <- as.factor(rep(1:(nrow(df_lines)/2),each=2))
-ggg <- ggplot(data=df_lines,aes(x=df_lines$x,y=df_lines$y))+geom_line(aes(color=as.factor(df_lines$person_id),group=fac))+geom_point(aes(color=as.factor(df_lines$person_id)))
-ggg <- ggg+theme_bw()
+ggg <- ggplot(data=df_lines,aes(x=df_lines$x,y=df_lines$y))+geom_line(aes(color=persons,group=fac))+geom_point(aes(color=persons))
+ggg <- ggg+theme_bw()+ggtitle("Gammaly distributed minutiae points")+xlab("x-axis")+ylab('y-axis')
 ggg    # this plot shows people's minutiae points
 
 
@@ -143,7 +156,8 @@ labels = c(rep(1,n_tests),rep(0,n_tests))
 predictions <- c(predictions,(1-predictions))
 pred <- prediction(predictions,labels)
 perf <- performance(pred,measure =  "tpr",x.measure = "fpr")
-plot(perf)
+false_rate = sum(predictions[1:(length(predictions)/2)]<0.5)/n_tests
+plot(perf,main = paste("Roc Curve of",number_of_people,'people with recognizing sd =',recog_sd,'\n False rate being:',false_rate))
 abline(a=0,b=1)
 
 
