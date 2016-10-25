@@ -1,0 +1,16 @@
+---
+title: "Portfolio on Permutation Test"
+author: "Ruinan(Victor) Zhang"
+date: "10/24/2016"
+output: word_document
+---
+
+# Background
+The task of this portfolio is to determine if a voting result is overturned because the voting process is tampered. In the specific case, among 8059 ballots returned, 1672 are not signed and therefore, disqualifed. The proposal is passed based on the signed votes: 3208 voted in favor and 3143 voted oppose. However, among the discounted votes, 730 were in favor and 942 were against. A jounalist suspect the voting result is tampered or the result is influenced by some external factors. The specific challenge of this project is to determine if the unproportional ratio between favor and against of the discounted votes are caused by randomness. 
+
+
+# Approach
+Assuming the counted portion of the votes are truely reflectory sample of people's opinion, the null hypothesis is that the favoring rate of the counted votes is equal to the favoring rate of the discounted votes. A permutation test on favoring rate is conducted to test this hypothesis. The idea of the permutation test is to draw many possible samples (idealy all possible combinations) from the counted votes with the size of discounted votes, in this case, 1672 out of 6351 and examine the favor rate of the sample. After numbers of same process, we can form a distribution of the favor rate and check the p-value of the observed discounted favor rate. 
+
+
+

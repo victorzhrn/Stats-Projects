@@ -30,3 +30,5 @@ df <- as.data.frame(table(range_distrib))
 names(df) <- c("range","count")
 
 ggplot(data=df,aes(x=range,y=count))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(angle=45))
+
+sum(ratio_distrib<test_favor_ratio)
