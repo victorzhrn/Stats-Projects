@@ -21,6 +21,7 @@ for (i in 1:n){
   ratio_distrib <- c(ratio_distrib,perm_favor_ratio)
 }
 
+# get the range of permutated favoring rate and construct a factor vector for plotting
 ratio_min = min(ratio_distrib)
 ratio_max = max(ratio_distrib)
 step = (ratio_max-ratio_min)/10
@@ -30,6 +31,11 @@ df <- as.data.frame(table(range_distrib))
 names(df) <- c("range","count")
 
 # construct distribution plot
-ggplot(data=df,aes(x=range,y=count))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(angle=45))
+g <- ggplot(data=df,aes(x=range,y=count))+geom_bar(stat = "identity")+
+  theme(axis.text.x = element_text(angle=45))
+g <- g+ggtitle("Distribution of Permutated Favoring Rate")+
+  xlab("Favoring Rate Range") + ylab("Count of Each Favoring Rate Range")
+g
 
+# count number of permutated favoring rate lower than observed discounted favoring rate
 sum(ratio_distrib<test_favor_ratio)
