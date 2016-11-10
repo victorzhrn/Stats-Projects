@@ -1,0 +1,15 @@
+---
+title: "StarbucksHistoryInvestigation"
+author: "Ruinan(Victor) Zhang"
+date: "11/9/2016"
+output: word_document
+---
+
+# Background
+This task is to investigate growth of chain companies such as Starbucks. The approach is to construct a dynamic graphic to illustrate Starbuck stores' expension. The date is provided by Winter who setted his mission drink coffee  from every company-owned (including partner companies) Starbucks in the world. The openning dates of the starbucks are provided on [his website](http://www.starbuckseverywhere.net/StoreOpeningDates.htm): 
+
+# Approach 
+To download the data from Winter's website, I used the web scrapping tools from rvest package to download and clean the informations about every starbucks stores he visited by 11/03/2016. Based on the address of each store, I used geocode() function to request the longtitude and latitude of every store.
+
+# Result
+
